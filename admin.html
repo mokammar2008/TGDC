@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - GameForge Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: #181c24;
+            color: #f3f3f3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .admin-panel {
+            max-width: 700px;
+            margin: 2rem auto;
+            background: #23283a;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            padding: 2.5rem 2rem 2rem 2rem;
+        }
+        .admin-content {
+            position: relative;
+        }
+        .close-admin {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            font-size: 2rem;
+            color: #ff4d4f;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-admin:hover {
+            color: #fff;
+            background: #ff4d4f;
+            border-radius: 50%;
+            padding: 0 0.4em;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            color: #ff9500;
+        }
+        .admin-form {
+            background: #20243a;
+            border-radius: 12px;
+            padding: 1.5rem 1rem 1rem 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #ff9500;
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid #31344b;
+            border-radius: 8px;
+            background: #23283a;
+            color: #f3f3f3;
+            font-size: 1rem;
+            transition: border 0.2s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #ff9500;
+            outline: none;
+        }
+        .submit-btn {
+            background: linear-gradient(90deg, #ff9500 60%, #ff4d4f 100%);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 2.2rem;
+            border-radius: 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(255,149,0,0.08);
+            margin-top: 0.5rem;
+        }
+        .submit-btn:hover {
+            background: linear-gradient(90deg, #ff4d4f 60%, #ff9500 100%);
+            box-shadow: 0 4px 16px rgba(255,77,79,0.12);
+        }
+        .form-status {
+            margin-bottom: 1rem;
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        .form-status.success {
+            background: #1e5631;
+            color: #b6ffb3;
+        }
+        .form-status.error {
+            background: #3a1e1e;
+            color: #ffb3b3;
+        }
+        .admin-games-list {
+            margin-top: 1.5rem;
+        }
+        .admin-game-item {
+            background: #23283a;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 1.2rem;
+            padding: 1.2rem 1rem 1rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1.5rem;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .admin-game-item:hover {
+            box-shadow: 0 6px 24px rgba(255,149,0,0.10);
+            transform: translateY(-2px) scale(1.01);
+        }
+        .admin-game-info h4 {
+            margin: 0 0 0.3rem 0;
+            color: #ff9500;
+            font-size: 1.2rem;
+        }
+        .admin-game-info p {
+            margin: 0 0 0.5rem 0;
+            color: #f3f3f3;
+            font-size: 1rem;
+        }
+        .admin-game-rating {
+            color: #ffd700;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+        .admin-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .edit-btn, .delete-btn {
+            border: none;
+            border-radius: 18px;
+            padding: 0.5rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .edit-btn {
+            background: #ff9500;
+            color: #fff;
+        }
+        .edit-btn:hover {
+            background: #ffb84d;
+            color: #23283a;
+        }
+        .delete-btn {
+            background: #ff4d4f;
+            color: #fff;
+        }
+        .delete-btn:hover {
+            background: #ffb3b3;
+            color: #23283a;
+        }
+        @media (max-width: 600px) {
+            .admin-panel {
+                padding: 1rem 0.2rem;
+            }
+            .admin-game-item {
+                flex-direction: column;
+                gap: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-panel" id="admin-panel" style="display:block;">
+        <div class="admin-content">
+            <h2 class="section-title">Admin Dashboard</h2>
+            <p style="text-align:center; color:#ff9500; margin-bottom:1.5rem; font-size:1.05rem;">
+                To <b>edit</b> a game, click the <i class="fas fa-edit"></i> Edit button.<br>
+                To <b>delete</b> a game, click the <i class="fas fa-trash"></i> Delete button.<br>
+                After editing, click <b>Update Game</b> to save changes.
+            </p>
+            <form class="admin-form" onsubmit="addGame(event)">
+                <div class="form-group">
+                    <label for="game-name"><i class="fas fa-gamepad"></i> Game Name</label>
+                    <input type="text" id="game-name" placeholder="Enter game name" required>
+                </div>
+                <div class="form-group">
+                    <label for="game-description"><i class="fas fa-align-left"></i> Description</label>
+                    <textarea id="game-description" rows="3" placeholder="Enter game description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="game-rating"><i class="fas fa-star"></i> Rating (1-5)</label>
+                    <input type="number" id="game-rating" min="1" max="5" value="5" required>
+                </div>
+                <div class="form-group">
+                    <label for="game-download"><i class="fas fa-download"></i> Download Link</label>
+                    <input type="url" id="game-download" placeholder="https://example.com/game-download" required>
+                </div>
+                <div class="form-group">
+                    <label for="game-image"><i class="fas fa-image"></i> Image URL</label>
+                    <input type="url" id="game-image" placeholder="https://example.com/game-image.jpg">
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-plus"></i> Add Game
+                </button>
+            </form>
+            <div class="admin-games-list" id="admin-games-list">
+                <!-- Admin games list will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script>
+        // Remove these ES6 import lines, they are not valid in browser scripts:
+        // import { initializeApp } from "firebase/app";
+        // import { getFirestore } from "firebase/firestore";
+
+        // Use only the compat Firebase API as you are including firebase-app-compat.js and firebase-firestore-compat.js
+        const firebaseConfig = {
+            apiKey: "AIzaSyDY4MyORHidlow_0HgKgMeVfMpjA1oErg8",
+            authDomain: "crud-8e803.firebaseapp.com",
+            projectId: "crud-8e803",
+            storageBucket: "crud-8e803.appspot.com",
+            messagingSenderId: "521706284207",
+            appId: "1:521706284207:web:d57b9487153f53afa3605a"
+        };
+        // Initialize Firebase using compat API
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let editingGameId = null;
+
+        function showStatus(message, type = 'success') {
+            const existingStatus = document.querySelector('.form-status');
+            if (existingStatus) existingStatus.remove();
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `form-status ${type}`;
+            statusDiv.textContent = message;
+            const adminForm = document.querySelector('.admin-form');
+            adminForm.insertBefore(statusDiv, adminForm.firstChild);
+            setTimeout(() => { statusDiv.remove(); }, 3000);
+        }
+
+        function addGame(event) {
+            event.preventDefault();
+            const name = document.getElementById('game-name').value.trim();
+            const description = document.getElementById('game-description').value.trim();
+            const rating = parseInt(document.getElementById('game-rating').value);
+            const downloadLink = document.getElementById('game-download').value.trim();
+            const imageUrl = document.getElementById('game-image').value.trim();
+            if (!name || !description || !downloadLink) {
+                showStatus('Please fill in all fields', 'error');
+                return;
+            }
+            const gameData = {
+                name,
+                description,
+                rating,
+                downloadLink,
+                imageUrl,
+                createdAt: new Date()
+            };
+            if (editingGameId) {
+                gameData.updatedAt = new Date();
+                db.collection('games').doc(editingGameId).update(gameData)
+                    .then(() => {
+                        showStatus('Game updated successfully!');
+                        resetAdminForm();
+                        loadAdminGames();
+                    })
+                    .catch(() => showStatus('Error updating game. Please try again.', 'error'));
+            } else {
+                db.collection('games').add(gameData)
+                    .then(() => {
+                        showStatus('Game added successfully!');
+                        document.querySelector('.admin-form').reset();
+                        loadAdminGames();
+                    })
+                    .catch(() => showStatus('Error adding game. Please try again.', 'error'));
+            }
+        }
+
+        function loadAdminGames() {
+            const adminGamesList = document.getElementById('admin-games-list');
+            adminGamesList.innerHTML = '<div style="text-align: center; padding: 2rem;"><div class="loading"></div><p>Loading games...</p></div>';
+            db.collection('games').orderBy('createdAt', 'desc').get()
+                .then((querySnapshot) => {
+                    adminGamesList.innerHTML = '';
+                    if (querySnapshot.empty) {
+                        adminGamesList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No games found. Add your first game!</p>';
+                        return;
+                    }
+                    querySnapshot.forEach((doc) => {
+                        const game = doc.data();
+                        const gameItem = document.createElement('div');
+                        gameItem.className = 'admin-game-item';
+                        gameItem.innerHTML = `
+                            <div class="admin-game-info">
+                                <h4>${game.name}</h4>
+                                <p>${game.description}</p>
+                                <div class="admin-game-rating">
+                                    ${'★'.repeat(game.rating)}${'☆'.repeat(5 - game.rating)} (${game.rating}/5)
+                                </div>
+                                <small style="color: var(--text-secondary);">
+                                    Download: 
+                                    <a href="${game.downloadLink}" target="_blank" 
+                                       style="color: #ff9500; text-decoration: underline; font-weight: 500; word-break: break-all;">
+                                        ${game.downloadLink.replace(/^https?:\/\//, '').split(/[/?#]/)[0]} <i class="fas fa-external-link-alt" style="font-size:0.9em"></i>
+                                    </a>
+                                </small><br>
+                                ${game.imageUrl ? `<img src="${game.imageUrl}" alt="Game Image" style="max-width:120px; margin-top:8px; border-radius:8px;">` : ''}
+                            </div>
+                            <div class="admin-buttons">
+                                <button class="edit-btn" onclick="editGame('${doc.id}', '${game.name.replace(/'/g, "\\'")}', '${game.description.replace(/'/g, "\\'")}', ${game.rating}, '${game.downloadLink}', '${game.imageUrl ? game.imageUrl.replace(/'/g, "\\'") : ''}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="delete-btn" onclick="deleteGame('${doc.id}', '${game.name.replace(/'/g, "\\'")}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        `;
+                        adminGamesList.appendChild(gameItem);
+                    });
+                })
+                .catch(() => {
+                    adminGamesList.innerHTML = '<p style="text-align: center; color: var(--danger-color); padding: 2rem;">Error loading games. Please try again.</p>';
+                });
+        }
+
+        function editGame(id, name, description, rating, downloadLink, imageUrl = '') {
+            editingGameId = id;
+            document.getElementById('game-name').value = name;
+            document.getElementById('game-description').value = description;
+            document.getElementById('game-rating').value = rating;
+            document.getElementById('game-download').value = downloadLink;
+            document.getElementById('game-image').value = imageUrl || '';
+            const submitBtn = document.querySelector('.admin-form .submit-btn');
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Game';
+            submitBtn.style.background = '#ff9500';
+            document.querySelector('.admin-form').scrollIntoView({ behavior: 'smooth' });
+            showStatus('Editing mode activated. Click "Update Game" to save changes.', 'success');
+        }
+
+        function deleteGame(id, name) {
+            if (confirm(`Are you sure you want to delete "${name}"? This action cannot be undone.`)) {
+                db.collection('games').doc(id).delete()
+                    .then(() => {
+                        showStatus(`"${name}" deleted successfully!`);
+                        loadAdminGames();
+                    })
+                    .catch(() => showStatus('Error deleting game. Please try again.', 'error'));
+            }
+        }
+
+        function resetAdminForm() {
+            editingGameId = null;
+            const form = document.querySelector('.admin-form');
+            form.reset();
+            const submitBtn = form.querySelector('.submit-btn');
+            submitBtn.innerHTML = '<i class="fas fa-plus"></i> Add Game';
+            submitBtn.style.background = 'var(--accent-color)';
+            const existingStatus = document.querySelector('.form-status');
+            if (existingStatus) existingStatus.remove();
+        }
+
+        function addDemoGamesIfEmpty() {
+            const demoGames = [
+                {
+                    name: "Demo Game 1",
+                    description: "This is a demo game description for Game 1.",
+                    rating: 4,
+                    downloadLink: "https://example.com/demo-game-1"
+                },
+                {
+                    name: "Demo Game 2",
+                    description: "This is a demo game description for Game 2.",
+                    rating: 5,
+                    downloadLink: "https://example.com/demo-game-2"
+                },
+                {
+                    name: "Demo Game 3",
+                    description: "This is a demo game description for Game 3.",
+                    rating: 3,
+                    downloadLink: "https://example.com/demo-game-3"
+                }
+            ];
+            try {
+                db.collection('games').limit(1).get().then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        // If the games collection is empty, add demo games
+                        demoGames.forEach((game, index) => {
+                            setTimeout(() => {
+                                db.collection('games').add({
+                                    ...game,
+                                    createdAt: new Date(Date.now() + index * 1000)
+                                }).catch(console.error);
+                            }, index * 1000);
+                        });
+                        showStatus('Demo games added. You can edit or delete them as needed.', 'success');
+                    } else {
+                        showStatus('Demo games already present. You can add new games or edit existing ones.', 'info');
+                    }
+                });
+            } catch (error) {
+                console.error("Error adding demo games: ", error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // initializeTheme(); // Only needed if you have a theme function
+            loadAdminGames(); // <-- This will load and show games from the database
+            // setTimeout(() => {
+            //     addDemoGamesIfEmpty();
+            // }, 2000);
+        });
+    </script>
+</body>
+</html>
